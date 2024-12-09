@@ -6,22 +6,38 @@ import {
   MaterialIcons,
 } from "@expo/vector-icons";
 
-export default function ProductCard({data}) {
+export default function ProductCard({ card }) {
   return (
     <View style={styles.card}>
       <View style={styles.imgBox}>
         <ImageBackground source={{ uri: card.imgsrc }} style={styles.img}>
           <View style={styles.labelsBox}>
             <View style={styles.deliveryBox}>
-              <MaterialCommunityIcons name="bus" size={10} color="white" />
               {card.freeDelivery && (
-                <Text style={styles.delivery}> FREE DELIVERY</Text>
+                <>
+                  <MaterialCommunityIcons
+                    name="bus"
+                    size={10}
+                    color="white"
+                    style={{ paddingLeft: 4 }}
+                  />
+                  <Text style={styles.delivery}>FREE DELIVERY</Text>
+                </>
               )}
             </View>
 
             <View style={styles.coinsBox}>
-              <MaterialCommunityIcons name="bitcoin" size={10} color="white" />
-              {card.coins && <Text style={styles.coins}> COINS</Text>}
+              {card.coins && (
+                <>
+                  <MaterialCommunityIcons
+                    name="bitcoin"
+                    size={10}
+                    color="white"
+                    style={{ paddingLeft: 4 }}
+                  />
+                  <Text style={styles.coins}>COINS</Text>
+                </>
+              )}
             </View>
           </View>
         </ImageBackground>
@@ -61,7 +77,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#F39609",
-    padding: 5,
     borderTopRightRadius: 5,
     borderBottomRightRadius: 5,
   },
@@ -69,8 +84,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#007C64",
-    padding: 5,
-    
   },
   ratingBox: {
     flexDirection: "row",
@@ -120,17 +133,20 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 8,
     fontWeight: "bold",
+    padding: 5,
   },
   coins: {
     color: "white",
     fontSize: 8,
     fontWeight: "bold",
+    padding: 5,
   },
   card: {
     width: 150,
     backgroundColor: "white",
     borderRadius: 10,
     elevation: 5,
+    margin: 10,
   },
   img: {
     width: 150,
