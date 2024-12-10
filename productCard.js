@@ -1,14 +1,34 @@
-import React from "react";
-import { View, Text, Button, StyleSheet, ImageBackground } from "react-native";
+import React, {memo} from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ImageBackground,
+  Pressable,
+} from "react-native";
 import {
   FontAwesome,
   MaterialCommunityIcons,
-  MaterialIcons,
 } from "@expo/vector-icons";
 
-export default function ProductCard({ card }) {
+function formatNumberToText(number) {
+  if (number >= 1e9) {
+    return (number / 1e9).toFixed(1).replace(/\.0$/, "") + "B"; // Billion
+  } else if (number >= 1e6) {
+    return (number / 1e6).toFixed(1).replace(/\.0$/, "") + "M"; // Million
+  } else if (number >= 1e3) {
+    return (number / 1e3).toFixed(1).replace(/\.0$/, "") + "k"; // Thousand
+  } else {
+    return number.toString(); // Less than 1k
+  }
+}
+
+function ProductCard({ card, navigation }) {
   return (
-    <View style={styles.card}>
+    <Pressable
+      style={({ pressed }) => [styles.card, pressed && styles.pressedCard]}
+      onPress={() => navigation.navigate("Detail", { card })}
+    >
       <View style={styles.imgBox}>
         <ImageBackground source={{ uri: card.imgsrc }} style={styles.img}>
           <View style={styles.labelsBox}>
@@ -62,17 +82,22 @@ export default function ProductCard({ card }) {
             <View style={styles.ratingBox}>
               <FontAwesome name="star" size={10} color="orange" />
               <Text style={styles.rating}>
-                {card.rating} ({card.reviewCount}) | {card.sold} sold{" "}
+                {card.rating} ({card.reviewCount}) | {formatNumberToText(card.sold)} sold
               </Text>
             </View>
           </View>
         </View>
       </View>
-    </View>
+    </Pressable>
   );
 }
 
+export default memo(ProductCard);
+
 const styles = StyleSheet.create({
+  pressedCard: {
+    backgroundColor: "#d0d0d0",
+  },
   coinsBox: {
     flexDirection: "row",
     alignItems: "center",
@@ -107,16 +132,19 @@ const styles = StyleSheet.create({
   price: {
     color: "#F96218",
     fontSize: 16,
+    padding: 5,
     fontWeight: "bold",
-    padding: 6,
+    alignSelf: "flex-start",
   },
   discount: {
     color: "#F96218",
     backgroundColor: "#FDECEF",
-    padding: 4,
-    borderRadius: 10,
+    padding: 3,
+    borderRadius: 5,
     fontSize: 11,
     fontWeight: "bold",
+    marginLeft: 1,
+    alignSelf: "flex-start",
   },
   priceDiscountBox: {
     flexDirection: "row",
