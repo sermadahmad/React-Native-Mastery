@@ -1,4 +1,4 @@
-import React, {memo} from "react";
+import React, { memo } from "react";
 import {
   View,
   Text,
@@ -6,10 +6,7 @@ import {
   ImageBackground,
   Pressable,
 } from "react-native";
-import {
-  FontAwesome,
-  MaterialCommunityIcons,
-} from "@expo/vector-icons";
+import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
 
 function formatNumberToText(number) {
   if (number >= 1e9) {
@@ -32,7 +29,12 @@ function ProductCard({ card, navigation }) {
       <View style={styles.imgBox}>
         <ImageBackground source={{ uri: card.imgsrc }} style={styles.img}>
           <View style={styles.labelsBox}>
-            <View style={styles.deliveryBox}>
+            <View
+              style={[
+                styles.deliveryBox,
+                !card.coins && styles.noCoinsDeliveryBox, 
+              ]}
+            >
               {card.freeDelivery && (
                 <>
                   <MaterialCommunityIcons
@@ -61,30 +63,33 @@ function ProductCard({ card, navigation }) {
             </View>
           </View>
         </ImageBackground>
-        <View style={styles.contentBox}>
+      </View>
+      <View style={styles.contentBox}>
+        <View>
+          <Text numberOfLines={1} ellipsizeMode="tail" style={styles.title}>
+            {card.title}
+          </Text>
+        </View>
+        <View style={styles.priceDiscountBox}>
           <View>
-            <Text numberOfLines={1} ellipsizeMode="tail" style={styles.title}>
-              {card.title}
-            </Text>
+            <Text style={styles.price}>Rs.{card.price}</Text>
           </View>
-          <View style={styles.priceDiscountBox}>
-            <View>
-              <Text style={styles.price}>Rs.{card.price}</Text>
-            </View>
-            <View>
-              <Text style={styles.discount}>-{card.discount}%</Text>
-            </View>
+          <View>
+            <Text style={styles.discount}>-{card.discount}%</Text>
           </View>
+        </View>
+        {card.coins && (
           <View>
             <Text style={styles.coinsSave}>Coins Save Rs.{card.coinsSave}</Text>
           </View>
-          <View>
-            <View style={styles.ratingBox}>
-              <FontAwesome name="star" size={10} color="orange" />
-              <Text style={styles.rating}>
-                {card.rating} ({card.reviewCount}) | {formatNumberToText(card.sold)} sold
-              </Text>
-            </View>
+        )}
+        <View>
+          <View style={styles.ratingBox}>
+            <FontAwesome name="star" size={10} color="orange" />
+            <Text style={styles.rating}>
+              {card.rating} ({card.reviewCount}) |{" "}
+              {formatNumberToText(card.sold)} sold
+            </Text>
           </View>
         </View>
       </View>
@@ -95,6 +100,10 @@ function ProductCard({ card, navigation }) {
 export default memo(ProductCard);
 
 const styles = StyleSheet.create({
+  noCoinsDeliveryBox: {
+    borderTopRightRadius: 5,
+    borderBottomRightRadius: 5,
+  },
   pressedCard: {
     backgroundColor: "#d0d0d0",
   },
